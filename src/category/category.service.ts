@@ -33,7 +33,7 @@ export class CategoryService {
             select: returnCategoryObject
         })
         if (!category) throw new Error('Category not found');
-
+        
         return category;
     }
     async create() {
