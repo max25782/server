@@ -7,7 +7,7 @@ import { ConfigModule } from '@nestjs/config'
 import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
 import { UserModule } from './user/user.module';
-import path from 'app-root-path'
+import { path } from 'app-root-path'
 
 @Module({
   imports: [

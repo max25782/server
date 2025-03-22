@@ -34,6 +34,7 @@ model Product {
   slug        String    @unique
   description String
   price       Int
+  weight      Float?    @default(0) @map("weight_per_meter")
   image       String
   category    Category? @relation(fields: [categoryId], references: [id])
   categoryId  String?

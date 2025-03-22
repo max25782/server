@@ -37,7 +37,18 @@ export class UserService {
     }
 
     async toggleFavorite(userId: string, productId: string) { 
-        const user = await this.getById(userId)
+        // Check if product exists
+        const product = await this.prisma.product.findUnique({
+            where: {
+                id: productId
+            }
+        });
+
+        if(!product) { 
+            throw new NotFoundException('Product not found');
+        }
+
+        const user = await this.getById(userId);
 
         if(!user) { 
             throw new NotFoundException('User not found');
@@ -56,8 +67,16 @@ export class UserService {
                     }
                 }
             }
-        })
-        return {message: 'Success'}
+        });
+        
+        return {
+            message: isExists ? 'Product removed from favorites' : 'Product added to favorites'
+        };
     }
 
+    async getFavorites(userId: string) {
+        const user = await this.getById(userId);
+        
+        return user.favorites;
+    }
 }

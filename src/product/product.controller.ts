@@ -1,11 +1,18 @@
-import { Controller, Query, UsePipes,Get, ValidationPipe, Param, HttpCode, Post, Put, Body, Delete } from '@nestjs/common';
+import { Controller, Query, UsePipes,Get, ValidationPipe, Param, HttpCode, Post, Put, Body, Delete, Patch, Redirect } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductDto } from './dto/product.dto';
 import { Auth } from 'src/auth/decorators/auth decorator';
+import { CategoryService } from 'src/category/category.service';
+import { UserService } from 'src/user/user.service';
+import { CurrentUser } from 'src/auth/decorators/user.decorator';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) { }
+  constructor(
+    private readonly productService: ProductService,
+    private readonly categoryService: CategoryService,
+    private readonly userService: UserService
+  ) { }
   
   @UsePipes(ValidationPipe)
   @Get()
@@ -27,8 +34,8 @@ export class ProductController {
   @HttpCode(200)
   @Post()
   @Auth()
-  async create() {
-    return this.productService.create();
+  async create(@Body() dto: ProductDto) {
+    return this.productService.create(dto);
   }
 
   @UsePipes(ValidationPipe)
@@ -44,5 +51,35 @@ export class ProductController {
   @Auth()
   async delete(@Param('id') id: string) {
     return this.productService.delete(id);
+  }
+
+  @Get('check-category/:id')
+  async checkCategory(@Param('id') id: string) {
+    try {
+      const category = await this.categoryService.byId(id);
+      return { exists: true, category };
+    } catch (error) {
+      return { exists: false, error: error.message };
+    }
+  }
+
+  @HttpCode(200)
+  @Auth()
+  @Patch(':id/favorite')
+  async toggleProductFavorite(
+    @CurrentUser('id') userId: string,
+    @Param('id') productId: string
+  ) {
+    return this.userService.toggleFavorite(userId, productId);
+  }
+  
+  @HttpCode(200)
+  @Auth()
+  @Post(':id/favorite')
+  async toggleProductFavoritePost(
+    @CurrentUser('id') userId: string,
+    @Param('id') productId: string
+  ) {
+    return this.userService.toggleFavorite(userId, productId);
   }
 }

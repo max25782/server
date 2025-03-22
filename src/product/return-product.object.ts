@@ -6,9 +6,9 @@ export const returnProductObject: Prisma.ProductSelect= {
     name: true,
     description: true,
     price: true,
+    weight: true,
     createdAt: true,
     slug: true,
     image: true,
     category: { select: returnCategoryObject}
-
 }
