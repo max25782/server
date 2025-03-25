@@ -8,6 +8,7 @@ import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
 import { UserModule } from './user/user.module';
 import { path } from 'app-root-path'
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { path } from 'app-root-path'
     AuthModule,
     CategoryModule,
     ProductModule,
-    UserModule],
+    UserModule,
+    OrderModule],
   controllers: [AppController],
   providers: [AppService]
 })

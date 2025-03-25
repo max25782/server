@@ -42,6 +42,7 @@ model Product {
   userId      String?
 
   @@map("product")
+  orderItem OrderItem[]
 }
 
 model Category {
@@ -63,10 +64,27 @@ model Order {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  reference String @unique
-
-  user   User?  @relation(fields: [userId], references: [id])
-  userId String
+  items  OrderItem[]
+  total  Int
+  user   User?       @relation(fields: [userId], references: [id])
+  userId String?     @map("user_id")
 
   @@map("order")
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  quantity Int
+  price    Int
+
+  orderId String? @map("order_id")
+  order   Order?  @relation(fields: [orderId], references: [id])
+
+  productId String? @map("product_id")
+  product   Product?  @relation(fields: [productId], references: [id])
+
+  @@map("order_item")
 }
