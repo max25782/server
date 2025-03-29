@@ -1,4 +1,4 @@
-import { IsArray, IsNumber, IsString } from "class-validator";
+import { IsArray, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class OrderItemDto {
     @IsNumber()
@@ -9,6 +9,14 @@ export class OrderItemDto {
 
      @IsNumber()
      quantity: number;
+     
+     @IsOptional()
+     @IsNumber()
+     length?: number;
+     
+     @IsOptional()
+     @IsNumber()
+     weight?: number;
 }
 
 export class OrderDto {

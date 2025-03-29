@@ -4,6 +4,7 @@ import { returnCategoryObject } from './return-category.object';
 import { Category, Prisma } from '@prisma/client';
 import { CategoryDto } from './dto/category.dto';
 import { generateSlug } from 'src/utils/generate-slug';
+import { faker } from '@faker-js/faker';
 
 @Injectable()
 export class CategoryService {
@@ -35,13 +36,14 @@ export class CategoryService {
         return category;
     }
     async create() {
+        const name = faker.commerce.department();
         return this.prisma.category.create({
             data: {
-                name: '',
-                slug: '',
-                image: '',
+                name,
+                slug: generateSlug(name + '-' + Date.now()),
+                image: faker.image.urlLoremFlickr({ category: 'food' }),
             },
-
+            select: returnCategoryObject
         })
     }
     async update(id: string, dto: CategoryDto)  {
@@ -53,14 +55,27 @@ export class CategoryService {
             throw new NotFoundException('Category not found');
         }
 
+        // Check if category with this name already exists and it's not the same category
+        const existingCategory = await this.prisma.category.findFirst({
+            where: {
+                name: dto.name,
+                id: { not: id }
+            }
+        });
+
+        if (existingCategory) {
+            throw new ConflictException('Category with this name already exists');
+        }
+
         try {
             return await this.prisma.category.update({
                 where: { id },
                 data: {
                     name: dto.name,
-                    slug: generateSlug(dto.name),
+                    slug: generateSlug(dto.name + '-' + Date.now()),
                     image: dto.image,
-               }
+                },
+                select: returnCategoryObject
             });
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {

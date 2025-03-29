@@ -19,6 +19,7 @@ model User {
   avatarPath String @default("/uploads/default-avatar.png") @map("avatar_path")
 
   phone     String?   @default("")
+  role      String    @default("user") @map("role")
   orders    Order[]
   favorites Product[]
 
@@ -30,19 +31,20 @@ model Product {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  name        String    @unique
-  slug        String    @unique
+  name        String      @unique
+  slug        String      @unique
   description String
-  price       Int
-  weight      Float?    @default(0) @map("weight_per_meter")
+  price       Int?
+  weight      Float?      @default(0) @map("weight_per_meter")
+  length      Float?      @default(0) @map("length_meter")
   image       String
-  category    Category? @relation(fields: [categoryId], references: [id])
+  category    Category?   @relation(fields: [categoryId], references: [id])
   categoryId  String?
-  user        User?     @relation(fields: [userId], references: [id])
+  user        User?       @relation(fields: [userId], references: [id])
   userId      String?
+  orderItem   OrderItem[]
 
   @@map("product")
-  orderItem OrderItem[]
 }
 
 model Category {
@@ -50,7 +52,7 @@ model Category {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  name  String @unique
+  name  String @unique(map: "unique_name_ci")
   slug  String @unique
   image String
 
@@ -79,12 +81,14 @@ model OrderItem {
 
   quantity Int
   price    Int
+  length   Float? @default(0) @map("length_meter")
+  weight   Float? @default(0) @map("weight_per_meter")
 
   orderId String? @map("order_id")
   order   Order?  @relation(fields: [orderId], references: [id])
 
-  productId String? @map("product_id")
-  product   Product?  @relation(fields: [productId], references: [id])
+  productId String?  @map("product_id")
+  product   Product? @relation(fields: [productId], references: [id])
 
   @@map("order_item")
 }

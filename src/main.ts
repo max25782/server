@@ -6,8 +6,10 @@ async function bootstrap() {
     logger: ['error', 'warn', 'log']
   })
 
-  app.setGlobalPrefix('api')
+  app.setGlobalPrefix('api', {
+    exclude: ['/'],
+  })
   app.enableCors()
-  await app.listen(process.env.PORT ?? 5000,'0.0.0.0')
+  await app.listen(process.env.PORT ?? 5000)
 }
 bootstrap()

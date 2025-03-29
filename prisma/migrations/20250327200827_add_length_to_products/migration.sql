@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "product" ADD COLUMN     "length_meter" DOUBLE PRECISION DEFAULT 0,
+ALTER COLUMN "price" DROP NOT NULL;

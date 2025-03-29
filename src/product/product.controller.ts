@@ -1,7 +1,7 @@
 import { Controller, Query, UsePipes,Get, ValidationPipe, Param, HttpCode, Post, Put, Body, Delete, Patch, Redirect } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductDto } from './dto/product.dto';
-import { Auth } from 'src/auth/decorators/auth decorator';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 import { CategoryService } from 'src/category/category.service';
 import { UserService } from 'src/user/user.service';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
@@ -43,14 +43,34 @@ export class ProductController {
   @Put(':id')
   @Auth()
   async update(@Param('id') id: string, @Body() dto: ProductDto) {
-    return this.productService.update(id, dto);
+    try {
+      const product = await this.productService.update(id, dto);
+      return { success: true, product };
+    } catch (error) {
+      console.error('Error in ProductController.update:', error);
+      return { 
+        success: false, 
+        message: error.message,
+        statusCode: error.status || 500
+      };
+    }
   }
 
   @HttpCode(200)
   @Delete(':id')
   @Auth()
   async delete(@Param('id') id: string) {
-    return this.productService.delete(id);
+    try {
+      const product = await this.productService.delete(id);
+      return { success: true, product };
+    } catch (error) {
+      console.error('Error in ProductController.delete:', error);
+      return { 
+        success: false, 
+        message: error.message,
+        statusCode: error.status || 500
+      };
+    }
   }
 
   @Get('check-category/:id')

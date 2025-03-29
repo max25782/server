@@ -1,0 +1,17 @@
+{
+  "admin": {
+    "title": "Admin Panel",
+    "users": "Users",
+    "orders": "Orders",
+    "create": "Create Admin",
+    "make_admin": "Make User Admin",
+    "user_not_found": "User not found",
+    "user_exists": "User already exists",
+    "success": "Operation successful",
+    "error": {
+      "not_found": "Not found",
+      "unauthorized": "Unauthorized",
+      "bad_request": "Bad request"
+    }
+  }
+} 

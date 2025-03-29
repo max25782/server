@@ -1,0 +1,17 @@
+{
+  "admin": {
+    "title": "פאנל ניהול",
+    "users": "משתמשים",
+    "orders": "הזמנות",
+    "create": "צור מנהל",
+    "make_admin": "הפוך משתמש למנהל",
+    "user_not_found": "משתמש לא נמצא",
+    "user_exists": "המשתמש כבר קיים",
+    "success": "הפעולה הושלמה בהצלחה",
+    "error": {
+      "not_found": "לא נמצא",
+      "unauthorized": "אין הרשאה",
+      "bad_request": "בקשה שגויה"
+    }
+  }
+} 

@@ -19,4 +19,8 @@ export class ProductDto {
     @IsOptional()
     @IsNumber()
     weight?: number;
+    
+    @IsOptional()
+    @IsNumber()
+    length?: number;
 }
